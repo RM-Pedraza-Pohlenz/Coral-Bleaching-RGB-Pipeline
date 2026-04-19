@@ -106,7 +106,7 @@ Rename segmented photos to positions 1–25.
 Inside each photo folder, include an `order.csv` file containing:
 
 - the original position (1–25)
-- the new fragment name (for example `C-1-1_I`)
+- the new fragment name (for example `T2-1-1`)
 
 **Important:**
 
@@ -158,7 +158,7 @@ python3 05_rename_blanks.py
 For each experiment, create a folder with this structure:
 
 ```text
-Exp#
+Trial
 ├── corals
 └── blanks
 ```
@@ -174,7 +174,7 @@ python3 06_organize_combined.py
 ### 7. Extract color metrics
 
 ```bash
-python 07_execute_and_collate_color_clustering.py --f ../data/07_final/meg_nov25 --o meg_nov25
+python 07_execute_and_collate_color_clustering.py --f ../data/07_final/trial --o trial
 ```
 
 Arguments:
