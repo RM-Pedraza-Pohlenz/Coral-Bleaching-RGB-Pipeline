@@ -1,7 +1,4 @@
----
-title: "Coral Bleaching RGB Pipeline"
-output: html_document
----
+# "Coral Bleaching RGB Pipeline"
 
 This repository contains the scripts and workflow used to extract RGB-derived color metrics from standardized coral photographs and compare them with physiological bleaching metrics. The pipeline was developed for coral bleaching assessment in CBASS-style acute heat stress experiments.
 
