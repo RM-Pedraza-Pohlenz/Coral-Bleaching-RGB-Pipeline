@@ -69,9 +69,9 @@ conda env create -f environment.yml -p $PWD/env
 conda activate $PWD/env
 ```
 
-#### 2. Download the pre-trained weights for CoralSCOP
+#### 2. Download the pre-trained weights for [CoralSCOP](https://github.com/zhengziqiang/CoralSCOP)
 
-We use the trained CoralSCOP model (ViT-B backbone). Download the weights and save them in the `checkpoints` folder.
+This workflow uses the pretrained **CoralSCOP** model with a ViT-B backbone. Download the model weights from the CoralSCOP repository and save them in the `checkpoints` folder.
 
 ## RGB image analysis workflow
 
