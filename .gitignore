@@ -99,25 +99,3 @@ Thumbs.db
 .Rhistory
 .RData
 .Rproj.user
-
-# Generated outputs
-rgb_analysis/outputs/
-rgb_physiology_analysis/outputs/
-
-# Raw and intermediate RGB workflow data
-rgb_analysis/data/01_raw/
-rgb_analysis/data/02_interim/
-rgb_analysis/data/03_rename/
-rgb_analysis/data/04_blank_folders/
-rgb_analysis/data/05_rename_blanks/
-rgb_analysis/data/06_combine/
-rgb_analysis/data/07_final/
-
-# Analysis data
-rgb_physiology_analysis/data/
-
-# Model weights / checkpoints
-rgb_analysis/checkpoints/
-*.pth
-*.pt
-*.ckpt
