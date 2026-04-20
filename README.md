@@ -65,6 +65,7 @@ Coral-Bleaching-RGB-Pipeline/
 Install Miniconda or Miniforge, then create and activate the environment:
 
 ```bash
+cd rgb_analysis
 conda env create -f environment.yml -p $PWD/env
 conda activate $PWD/env
 ```
