@@ -1,6 +1,15 @@
-# "Coral Bleaching RGB Pipeline"
+# Coral Bleaching RGB Pipeline
 
-This repository contains the scripts and workflow used to extract RGB-derived color metrics from standardized coral photographs and compare them with physiological bleaching metrics. The pipeline was developed for coral bleaching assessment in CBASS-style acute heat stress experiments.
+This repository contains the scripts and workflow used to extract 
+RGB-derived color metrics from standardized coral photographs and 
+compare them with physiological bleaching metrics, implementing the 
+analytical workflow described in Pedraza-Pohlenz et al. (2026). 
+This includes the D_toWhite metric — the Euclidean distance in CIELAB 
+color space between each coral fragment and a co-imaged white reference 
+patch — as a cost-effective proxy for coral bleaching severity. While 
+validated using CBASS-style experiments, the pipeline is applicable to 
+any experimental or monitoring context involving standardized photographs 
+of coral fragments with a co-imaged white reference patch.
 
 ## Overview
 
@@ -44,6 +53,9 @@ Coral-Bleaching-RGB-Pipeline/
 ## Getting started
 
 ### Hardware specifications used
+
+**Note:** A GPU is required only for the CoralSCOP segmentation step. 
+The R analysis scripts run on standard hardware without GPU requirements.
 
 - CPU: 13th Gen Intel Core i9-13980HX @ 2.20 GHz
 - GPU: NVIDIA GeForce RTX 4090 Laptop GPU (16 GB VRAM)
@@ -210,10 +222,10 @@ Generated files are saved in the `outputs/` directories, including:
 - scatterplots
 - supplementary statistical results
 
-## Notes
-
-This pipeline was developed for standardized coral bleaching assessment using digital photography and RGB-based color metrics. It is intended for use with CBASS-style experiments and paired physiological measurements such as Fv/Fm, symbiont density, chlorophyll content, and host protein.
-
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Citation
+
+Citation details will be added upon publication.
