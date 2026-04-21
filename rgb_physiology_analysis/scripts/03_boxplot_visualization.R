@@ -138,14 +138,6 @@ make_panel <- function(df, species_name, outcome_label, y_min, y_max, box_color)
       linewidth = 0.3,
       color = "black"
     ) +
-    stat_summary(
-      fun = mean,
-      geom = "point",
-      shape = 21,
-      size = 1.5,
-      fill = "white",
-      color = "black"
-    ) +
     force_panelsizes(rows = unit(45, "mm"), cols = unit(50, "mm")) +
     scale_x_discrete(
       labels = treatment_labels,
