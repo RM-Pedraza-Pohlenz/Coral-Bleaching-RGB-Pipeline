@@ -255,4 +255,3 @@ dependencies:
       - torchvision==0.18.0+cu121
       - triton==2.3.0
       - typing-extensions==4.9.0
-prefix: /home/rmijailpp/miniconda3/envs/coralscop
