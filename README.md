@@ -28,6 +28,7 @@ Coral-Bleaching-RGB-Pipeline/
 ├── README.md
 ├── environment.yml
 ├── rgb_analysis/
+│   ├── checkpoints/
 │   ├── data/
 │   │   ├── 01_raw/
 │   │   ├── 02_interim/
@@ -39,7 +40,6 @@ Coral-Bleaching-RGB-Pipeline/
 │   ├── notebooks/
 │   └── outputs/
 └── rgb_physiology_analysis/
-    ├── checkpoints/
     ├── data/
     ├── outputs/
     └── scripts/
