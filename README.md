@@ -210,6 +210,8 @@ The R scripts are organized as follows:
 - `04_heatmap_figure.R` — heatmap of top-performing indices across focal outcomes
 - `05_scatterplot_figure.R` — scatterplots comparing Fv/Fm and D_toWhite
 - `06_variance_partitioning.R` — variance partitioning analysis comparing D_toWhite with competing indices
+- `07_sensitivity_analyses.R` - run sensitivity & robustness analyses
+- `08_composite_ranking.R` — run composite ranking analyses
 
 ## Outputs
 
