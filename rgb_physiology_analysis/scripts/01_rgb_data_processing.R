@@ -109,6 +109,22 @@ cv_rmse_grouped_y <- function(df, xvar, yvar, covars = NULL,
   mean(out, na.rm = TRUE)
 }
 
+spearman_boot_ci <- function(x, y, R = 1000, conf = 0.95) {
+  complete <- complete.cases(x, y)
+  x <- x[complete]
+  y <- y[complete]
+  n <- length(x)
+  if (n < 6) return(list(ci_lower = NA_real_, ci_upper = NA_real_))
+  boot_rho <- replicate(R, {
+    idx <- sample(n, replace = TRUE)
+    cor(x[idx], y[idx], method = "spearman")
+  })
+  list(
+    ci_lower = unname(quantile(boot_rho, (1 - conf) / 2)),
+    ci_upper = unname(quantile(boot_rho, 1 - (1 - conf) / 2))
+  )
+}
+
 metrics_one_species_y <- function(df, xvars, yvar, covars = NULL) {
   do.call(rbind, lapply(xvars, function(xv) {
     dat <- dplyr::filter(df, stats::complete.cases(.data[[xv]], .data[[yvar]]))
@@ -120,11 +136,13 @@ metrics_one_species_y <- function(df, xvars, yvar, covars = NULL) {
     
     r_est <- NA_real_
     r_p   <- NA_real_
+    ci    <- list(ci_lower = NA_real_, ci_upper = NA_real_)
     
     if (sd(dat[[xv]]) > 0 && sd(dat[[yvar]]) > 0) {
       ct    <- suppressWarnings(cor.test(dat[[xv]], dat[[yvar]], method = "spearman"))
       r_est <- unname(ct$estimate)
       r_p   <- ct$p.value
+      ci    <- spearman_boot_ci(dat[[xv]], dat[[yvar]], R = 1000)
     }
     
     tibble::tibble(
@@ -132,10 +150,12 @@ metrics_one_species_y <- function(df, xvars, yvar, covars = NULL) {
       Outcome     = yvar,
       Covars      = paste(covars, collapse = "+"),
       p_spearman  = r_est,
-      p_pvalue    = r_p,
+      ci_lower    = ci$ci_lower,   # <-- new
+      ci_upper    = ci$ci_upper,   # <-- new
+      p_value    = r_p,
       CV_RMSE     = cv_rmse_grouped_y(
         dat, xv, yvar,
-        covars = covars,
+        covars    = covars,
         group_col = "Genotype",
         k = 5, reps = 100, seed = 42
       ),
@@ -143,7 +163,6 @@ metrics_one_species_y <- function(df, xvars, yvar, covars = NULL) {
       RMSE_in     = sqrt(mean((dat[[yvar]] - pred)^2)),
       AIC         = AIC(fit),
       BIC         = BIC(fit),
-      p_value     = coef(summary(fit))[xv, "Pr(>|t|)"],
       N           = nrow(dat),
       nGenos      = dplyr::n_distinct(dat$Genotype)
     )
@@ -151,6 +170,9 @@ metrics_one_species_y <- function(df, xvars, yvar, covars = NULL) {
 }
 
 run_all_outcomes_final <- function(df, species_levels, xvars, outcomes, covars = NULL) {
+  # Add to the top of run_all_outcomes_final before the map_dfr call
+  message("Running analysis for ", length(species_levels), " species x ",
+          length(outcomes), " outcomes x ", length(xvars), " indices...")
   purrr::map_dfr(species_levels, function(sp) {
     purrr::map_dfr(outcomes, function(yv) {
       metrics_one_species_y(
@@ -290,7 +312,7 @@ final_rgb <- final_rgb %>%
     
     KI = R_coral / (R_coral - B_coral),
     
-    Distance = if (all(c("R_blank", "G_blank", "B_blank") %in% names(final_rgb))) {
+    D_toWhite_RGB_corrected = if (all(c("R_blank", "G_blank", "B_blank") %in% names(final_rgb))) {
       sqrt((R_blank - R_coral)^2 +
              (G_blank - G_coral)^2 +
              (B_blank - B_coral)^2)
@@ -388,7 +410,7 @@ index_vars <- c(
   "R_minus_G", "R_minus_B", "G_minus_B",
   "g_minus_r", "g_minus_b", "r_minus_b",
   "NRBI", "NGRI", "NGBI",
-  "KI", "Distance",
+  "KI", "D_toWhite_RGB_corrected",
   "ExG", "ExG_2", "VEG", "ExR", "ExB", "ExGR", "ExGR_2",
   "SAVI", "OSAVI", "EVI", "EVI_2", "VDVI", "VARI", "MGRVI",
   "CIVE_raw", "WI", "WI_old",
@@ -481,7 +503,7 @@ res_panel_final <- run_all_outcomes_final(
 # 13. Diagnostics for ranking table
 # =========================================================
 
-cols_sort <- c("p_spearman", "CV_RMSE", "R2", "p_pvalue", "RMSE_in", "AIC", "BIC", "p_adj_BH")
+cols_sort <- c("p_spearman", "CV_RMSE", "R2", "p_value", "RMSE_in", "AIC", "BIC", "p_adj_BH")
 
 sapply(res_panel_final[cols_sort], function(x) paste(class(x), collapse = "/"))
 sapply(res_panel_final[cols_sort], is.list)
@@ -497,20 +519,20 @@ outcome_c <- "total_chl_cm2"
 outcome_d <- "host_protein_cm2"
 
 rank_four <- res_panel_final %>%
-  filter(Outcome %in% c(outcome_a, outcome_b, outcome_c, outcome_d)) %>%
-  group_by(Species, Outcome) %>%
+  dplyr::filter(Outcome %in% c(outcome_a, outcome_b, outcome_c, outcome_d)) %>%
+  dplyr::group_by(Species, Outcome) %>%
   dplyr::arrange(
     desc(abs(p_spearman)),
     p_adj_BH,
     CV_RMSE,
-    p_pvalue,
+    p_value,
     RMSE_in,
     AIC,
     BIC,
     .by_group = TRUE
   ) %>%
-  mutate(Rank = row_number()) %>%
-  ungroup()
+  dplyr::mutate(Rank = row_number()) %>%
+  dplyr::ungroup()
 
 
 # =========================================================
