@@ -230,5 +230,5 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Citation
 
-# Preprint
+Preprint
 Ricardo M. Pedraza-Pohlenz, Holger Anlauf, Didier Barradas-Bautista et al. Beyond PAM: Digital photography and RGB color analysis as a cost-effective method for coral bleaching assessment, 11 May 2026, PREPRINT (Version 1) available at Research Square [https://doi.org/10.21203/rs.3.rs-9541731/v1]
